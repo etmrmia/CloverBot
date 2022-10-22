@@ -3,8 +3,11 @@ import 'package:clover_bot/pages/alerts_list.dart';
 import 'package:clover_bot/pages/moods_list.dart';
 import 'package:clover_bot/pages/pain_level_list.dart';
 import 'package:clover_bot/pages/settings.dart';
+import 'package:clover_bot/models/message_info.dart';
 import 'package:clover_bot/sidemenu.dart';
 import 'package:clover_bot/searchbar.dart';
+import 'package:clover_bot/all_messages.dart';
+import 'package:clover_bot/models/message.dart';
 
 void main() => runApp(const MyApp());
 
@@ -40,21 +43,115 @@ class MyHomePage extends StatefulWidget {
 }
 
 class _MyHomePageState extends State<MyHomePage> {
+  final controller = TextEditingController();
+
+  @override
+  void dispose() {
+    // Clean up the controller when the widget is disposed.
+    controller.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
+    MessagesInfo message = messages;
+
     // layout of homepage
     return Scaffold(
       appBar: AppBar(title: Text("Clover Bot")),
       body: Stack(
         children: <Widget>[
           // displays messages in a table
-          Table(
-            children: const [
-              TableRow(children: <Widget>[TableCell(child: Text('something'))])
-            ],
+          SingleChildScrollView(
+            physics: const ScrollPhysics(),
+            padding: const EdgeInsets.all(6),
+            child: Column(
+              children: <Widget>[
+                ListView.builder(
+                  physics: const NeverScrollableScrollPhysics(),
+                  shrinkWrap: true,
+                  itemCount: message.length,
+                  itemBuilder: (context, index) {
+                    return FittedBox(
+                      alignment: message.messagesIndex(index).isUser
+                          ? Alignment.centerRight
+                          : Alignment.centerLeft,
+                      fit: BoxFit.scaleDown,
+                      child: Flexible(
+                        flex: 2,
+                        fit: FlexFit.loose,
+                        child: Container(
+                          padding: const EdgeInsets.all(10),
+                          margin: const EdgeInsets.all(5),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            borderRadius: BorderRadius.circular(20.0),
+                            color: Colors.lightGreen,
+                          ),
+                          child: Text(
+                            message.messagesIndex(index).message,
+                            style: const TextStyle(
+                                fontSize: 13, color: Colors.black),
+                          ),
+                        ),
+                      ),
+                    );
+                  },
+                ),
+              ],
+            ),
           ),
+
           // Search bar
-          const SearchBar(),
+          Expanded(
+            child: Align(
+              alignment: FractionalOffset.bottomCenter,
+              child: Container(
+                margin: const EdgeInsets.all(0),
+                padding: const EdgeInsets.all(10.0),
+                color: Colors.white,
+                height: 100.0,
+                alignment: FractionalOffset.topCenter,
+                child: TextFormField(
+                  controller: controller,
+                  textInputAction: TextInputAction.send,
+                  onFieldSubmitted: (value) {
+                    setState(
+                      () {
+                        if (controller.text.isNotEmpty) {
+                          message.add(
+                              Message(message: controller.text, isUser: true));
+                          message.add(Message(
+                              message: "I'm sorry to hear that...",
+                              isUser: false));
+                          message.add(Message(
+                              message: "Don't worry ! ^-^", isUser: false));
+                          message.add(Message(
+                              message: "Check out these resources! ",
+                              isUser: false));
+
+                          controller.clear();
+                        }
+                      },
+                    );
+                  },
+                  // showDialog(
+                  //     context: context,
+                  //     builder: (context) {
+                  //       return AlertDialog(
+                  //         content: Text(myController.text),
+                  //       );
+                  //     });
+                  decoration: const InputDecoration(
+                    border: OutlineInputBorder(),
+                    labelText: 'Message',
+                    filled: true,
+                    fillColor: Colors.white,
+                  ),
+                ),
+              ),
+            ),
+          ),
         ],
       ),
       // Scrolling Sidebar

@@ -12,9 +12,9 @@ class _AlertListState extends State<AlertList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Alerts')),
+      appBar: AppBar(title: Text('Discussion Boards')),
       body: const Center(
-        child: Text('Alerts'),
+        child: Text('Discussion Board'),
       ),
       // Scrolling Sidebar
       drawer: const SideMenu(),

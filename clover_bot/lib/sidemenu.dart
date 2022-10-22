@@ -29,7 +29,7 @@ class SideMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Alerts'),
+            title: const Text('Discussion Boards'),
             onTap: () {
               Navigator.pushNamed(context, '/alerts');
             },
@@ -41,7 +41,7 @@ class SideMenu extends StatelessWidget {
             },
           ),
           ListTile(
-            title: const Text('Pain Level'),
+            title: const Text('Resources'),
             onTap: () {
               Navigator.pushNamed(context, '/pain_level');
             },

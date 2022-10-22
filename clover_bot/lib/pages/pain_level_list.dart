@@ -12,9 +12,9 @@ class _PainLevelListState extends State<PainLevelList> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
-      appBar: AppBar(title: Text('Pain Level')),
+      appBar: AppBar(title: Text('Resources')),
       body: const Center(
-        child: Text('Pain level'),
+        child: Text('Resources'),
       ),
       // Scrolling Sidebar
       drawer: const SideMenu(),
